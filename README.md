@@ -1,3 +1,12 @@
+# Prusa MK4/S High Temp Mod + Bed Probe Mod
+I kept getting "nozzle cleaning failed" attempting to print Siraya PPA-CF Core on MK4S with [metacollin's high temp mod](https://github.com/metacollin/Prusa-Firmware-Buddy).
+
+This fork adds an additional mod that relaxes one of the many parameters of the nozzle strain gage probe logic to try to address this.
+
+**This is very experimental.  USE AT YOUR OWN RISK.**
+
+Remainder of this readme is from metacollin.
+
 # Prusa MK4/S High Temp Mod 450°C Max
 Does your Prusa MK4 have an unequenchable thirst for heat? 
 Want to print PPS, PEI, and other >300°C+ or even >400°C filaments? 
