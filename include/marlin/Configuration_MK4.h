@@ -216,7 +216,7 @@
 //============================= Thermal Settings ============================
 //===========================================================================
 
-#define TEMP_SENSOR_0 2005
+#define TEMP_SENSOR_0 1010
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
@@ -253,14 +253,14 @@
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
-#define HEATER_0_MAXTEMP 305
+#define HEATER_0_MAXTEMP 450
 #define HEATER_1_MAXTEMP 275
 #define HEATER_2_MAXTEMP 275
 #define HEATER_3_MAXTEMP 275
 #define HEATER_4_MAXTEMP 275
 #define HEATER_5_MAXTEMP 275
 #define HEATER_MAXTEMP_SAFETY_MARGIN 15
-#define BED_MAXTEMP 125
+#define BED_MAXTEMP 140
 #define BED_MAXTEMP_SAFETY_MARGIN 5
 #define HEATBREAK_MAXTEMP 100
 #define CHAMBER_MAXTEMP 100

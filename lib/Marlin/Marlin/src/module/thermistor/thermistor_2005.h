@@ -29,7 +29,7 @@
 // Calculated values are for 10 bit ADC reading
 // NOTE Please ! OV function, recalculates the ADC read value based on oversamplenr factor
 
-const short temptable_2005[][2] PROGMEM = {
+const int32_t temptable_2005[][2] PROGMEM = {
 { OV(60), 320 }, // Projected value just to trigger error on short circuit
 { OV(67), 310 },
 { OV(78), 300 },

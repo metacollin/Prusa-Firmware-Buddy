@@ -21,32 +21,25 @@
  */
 #pragma once
 
-// R25 = 100 kOhm, beta25/85 = 4390K � 1%, 4.7 kOhm pull-up
-// ATC Semitec 104JT-050 Jt Thermistor 100k 50 Shape
-// Semitec corporaton .
-// Resistance 100K/25�C
-// Beta value 4390K
-// Shape 50
-// Highly accurate �1% tolerances
-// Fast response to temperature change
-// Working temperature -50�C -  +125�C
-// Calculated using 4.7kohm pullup, voltage divider math, and manufacturer provided temp/resistance
-const int32_t temptable_2004[][2] PROGMEM = {
-{ OV(354), 125 },
-{ OV(387), 120 },
-{ OV(463), 110 },
-{ OV(543), 100 },
-{ OV(626), 90 },
-{ OV(706), 80 },
-{ OV(780), 70 },
-{ OV(844), 60 },
-{ OV(896), 50 },
-{ OV(937), 40 },
-{ OV(966), 30 },
-{ OV(987), 20 },
-{ OV(1001), 10 },
-{ OV(1010), 0 },
-{ OV(1016), -10 },
-{ OV(1019), -20 },
-{ OV(1021), -30 },
+// Pt1000 with 1k0 pullup
+const int32_t temptable_1010[][2] PROGMEM = {
+  PtLine(  0, 1000, 1000),
+  PtLine( 25, 1000, 1000),
+  PtLine( 50, 1000, 1000),
+  PtLine( 75, 1000, 1000),
+  PtLine(100, 1000, 1000),
+  PtLine(125, 1000, 1000),
+  PtLine(150, 1000, 1000),
+  PtLine(175, 1000, 1000),
+  PtLine(200, 1000, 1000),
+  PtLine(225, 1000, 1000),
+  PtLine(250, 1000, 1000),
+  PtLine(275, 1000, 1000),
+  PtLine(300, 1000, 1000),
+  PtLine(325, 1000, 1000),
+  PtLine(350, 1000, 1000),
+  PtLine(375, 1000, 1000),
+  PtLine(400, 1000, 1000),
+  PtLine(425, 1000, 1000),
+  PtLine(450, 1000, 1000)
 };

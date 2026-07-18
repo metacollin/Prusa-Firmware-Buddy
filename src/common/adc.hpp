@@ -193,7 +193,7 @@ enum AD1 {
 #endif
 } // namespace AdcChannel
 
-inline constexpr uint16_t raw_adc_value_at_50_degreas_celsius = 993;
+inline constexpr uint16_t raw_adc_value_at_50_degreas_celsius = 3972;
 
 template <ADC_HandleTypeDef &adc, size_t channels>
 class AdcDma {
@@ -422,9 +422,9 @@ namespace AdcGet {
 static constexpr uint16_t undefined_value = AdcDma1::reset_value;
 
 #if (BOARD_IS_BUDDY())
-inline uint16_t nozzle() { return adcDma1.get_and_shift_channel(AdcChannel::hotend_T); }
-inline uint16_t bed() { return adcDma1.get_and_shift_channel(AdcChannel::heatbed_T); }
-inline uint16_t boardTemp() { return adcDma1.get_and_shift_channel(AdcChannel::board_T); }
+inline uint16_t nozzle() { return adcDma1.get_channel(AdcChannel::hotend_T); }
+inline uint16_t bed() { return adcDma1.get_channel(AdcChannel::heatbed_T); }
+inline uint16_t boardTemp() { return adcDma1.get_channel(AdcChannel::board_T); }
 inline uint16_t pinda() { return adcDma1.get_and_shift_channel(AdcChannel::pinda_T); }
 inline uint16_t bedMon() { return adcDma1.get_and_shift_channel(AdcChannel::heatbed_U); }
 inline uint16_t vref() { return adcDma1.get_channel(AdcChannel::vref); } ///< Internal reference necessary for mcu_temperature
@@ -438,7 +438,7 @@ static_assert((adcDma1.sample_max * nozzle_buff_size) <= std::numeric_limits<dec
     "Sum buffer type can overflow");
 
 inline uint16_t nozzle() {
-    auto raw_temp = adcDma1.get_and_shift_channel(AdcChannel::hotend_T);
+    auto raw_temp = adcDma1.get_channel(AdcChannel::hotend_T);
 
     // increase oversampling for values lower than 50 degrees Celsius to reduce noise
     if (raw_temp > raw_adc_value_at_50_degreas_celsius) {
@@ -447,9 +447,8 @@ inline uint16_t nozzle() {
             return adcDma1.reset_value;
         }
 
-        // decimate to match the behavior of get_and_shift_channel()
         auto raw_temp_avg = nozzle_ring_buff.GetSum() / nozzle_ring_buff.GetSize();
-        return raw_temp_avg >> adcDma1.shift_bits;
+        return raw_temp_avg;
     }
 
     return raw_temp;
@@ -465,17 +464,17 @@ inline void sampleNozzle() {
     }
 }
 
-inline uint16_t bed() { return adcDma1.get_and_shift_channel(AdcChannel::heatbed_T); }
+inline uint16_t bed() { return adcDma1.get_channel(AdcChannel::heatbed_T); }
     #if (!PRINTER_IS_PRUSA_MK3_5())
-inline uint16_t heatbreakTemp() { return adcDma1.get_and_shift_channel(AdcChannel::heatbreak_T); }
+inline uint16_t heatbreakTemp() { return adcDma1.get_channel(AdcChannel::heatbreak_T); }
     #endif
-inline uint16_t boardTemp() { return adcDma3.get_and_shift_channel(AdcChannel::board_T); }
+inline uint16_t boardTemp() { return adcDma3.get_channel(AdcChannel::board_T); }
 inline uint16_t heater_voltage() { return adcDma1.get_and_shift_channel(AdcChannel::hotend_U); }
 inline uint16_t bed_voltage() { return adcDma1.get_and_shift_channel(AdcChannel::heatbed_U); }
 
     #if PRINTER_IS_PRUSA_iX()
-inline uint16_t psu_temp() { return adcDma1.get_and_shift_channel(AdcChannel::heatbed_T); }
-inline uint16_t ambient_temp() { return adcDma3.get_and_shift_channel(AdcChannel::case_T); }
+inline uint16_t psu_temp() { return adcDma1.get_channel(AdcChannel::heatbed_T); }
+inline uint16_t ambient_temp() { return adcDma3.get_channel(AdcChannel::case_T); }
     #elif PRINTER_IS_PRUSA_COREONE() || PRINTER_IS_PRUSA_COREONEL() || PRINTER_IS_PRUSA_MK4()
 inline uint16_t door_sensor() { return adcDma3.get_channel(AdcChannel::door_sensor); }
     #endif
@@ -489,7 +488,7 @@ inline uint16_t mcuTemperature() { return adcDma1.get_channel(AdcChannel::mcu_te
 
 #if BOARD_IS_XLBUDDY()
 inline uint16_t dwarfsCurrent() { return adcDma1.get_and_shift_channel(AdcChannel::dwarf_I); };
-inline uint16_t boardTemp() { return adcDma3.get_and_shift_channel(AdcChannel::board_T); };
+inline uint16_t boardTemp() { return adcDma3.get_channel(AdcChannel::board_T); };
 inline uint16_t inputVoltage24V() { return PowerHWIDAndTempMux.get_and_shift_channel(AdcChannel::board_U24); };
 inline uint16_t inputVoltage5V() { return PowerHWIDAndTempMux.get_and_shift_channel(AdcChannel::board_U5); };
 inline uint16_t sandwichCurrent5V() { return PowerHWIDAndTempMux.get_and_shift_channel(AdcChannel::sandwich_I5); };
@@ -497,7 +496,7 @@ inline uint16_t xlbuddyCurrent5V() { return PowerHWIDAndTempMux.get_and_shift_ch
 inline uint16_t hwId0() { return PowerHWIDAndTempMux.get_channel(AdcChannel::hw_id_0); };
 inline uint16_t hwId1() { return PowerHWIDAndTempMux.get_channel(AdcChannel::hw_id_1); };
 inline uint16_t hwId2() { return PowerHWIDAndTempMux.get_channel(AdcChannel::hw_id_2); };
-inline uint16_t splitterTemp() { return PowerHWIDAndTempMux.get_and_shift_channel(AdcChannel::splitter_temp); };
+inline uint16_t splitterTemp() { return PowerHWIDAndTempMux.get_channel(AdcChannel::splitter_temp); };
 inline uint16_t side_filament_sensor(AdcChannel::SideFilamnetSensorsAndTempMux channel) {
     assert(channel >= AdcChannel::sfs1 && channel <= AdcChannel::sfs6);
     return SFSAndTempMux.get_channel(channel);
@@ -508,20 +507,20 @@ inline uint16_t sideFilamentSensor3() { return SFSAndTempMux.get_channel(AdcChan
 inline uint16_t sideFilamentSensor4() { return SFSAndTempMux.get_channel(AdcChannel::sfs4); };
 inline uint16_t sideFilamentSensor5() { return SFSAndTempMux.get_channel(AdcChannel::sfs5); };
 inline uint16_t sideFilamentSensor6() { return SFSAndTempMux.get_channel(AdcChannel::sfs6); };
-inline uint16_t sandwichTemp() { return SFSAndTempMux.get_and_shift_channel(AdcChannel::sandwich_temp); };
-inline uint16_t ambientTemp() { return SFSAndTempMux.get_and_shift_channel(AdcChannel::ambient_temp); };
+inline uint16_t sandwichTemp() { return SFSAndTempMux.get_channel(AdcChannel::sandwich_temp); };
+inline uint16_t ambientTemp() { return SFSAndTempMux.get_channel(AdcChannel::ambient_temp); };
 inline uint16_t vref() { return adcDma1.get_channel(AdcChannel::vref); } ///< Internal reference necessary for mcu_temperature
 inline uint16_t mcuTemperature() { return adcDma1.get_channel(AdcChannel::mcu_temperature); } ///< Raw sensor, use getMCUTemp() instead
 #endif
 
 #if BOARD_IS_DWARF()
 inline uint16_t inputf24V() { return adcDma1.get_and_shift_channel(AdcChannel::dwarf_24V); }
-inline uint16_t nozzle() { return adcDma1.get_and_shift_channel(AdcChannel::ntc); }
+inline uint16_t nozzle() { return adcDma1.get_channel(AdcChannel::ntc); }
 inline uint16_t heaterCurrent() { return adcDma1.get_and_shift_channel(AdcChannel::heater_current); }
 inline uint16_t picked0() { return adcDma1.get_channel(AdcChannel::picked0); }
 inline uint16_t picked1() { return adcDma1.get_channel(AdcChannel::picked1); }
-inline uint16_t heatbreakTemp() { return adcDma1.get_and_shift_channel(AdcChannel::ntc2); }
-inline uint16_t boardTemp() { return adcDma1.get_and_shift_channel(AdcChannel::ntc_internal); }
+inline uint16_t heatbreakTemp() { return adcDma1.get_channel(AdcChannel::ntc2); }
+inline uint16_t boardTemp() { return adcDma1.get_channel(AdcChannel::ntc_internal); }
 inline uint16_t toolFimalentSensor() { return adcDma1.get_channel(AdcChannel::TFS); }
 inline uint16_t mcuTemperature() { return adcDma1.get_channel(AdcChannel::mcu_temperature); } ///< Raw sensor, use getMCUTemp() instead
 inline uint16_t vref() { return adcDma1.get_channel(AdcChannel::vref); } ///< Internal reference necessary for mcu_temperature

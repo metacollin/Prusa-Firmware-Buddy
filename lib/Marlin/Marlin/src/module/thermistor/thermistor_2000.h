@@ -26,7 +26,7 @@
 // TDK Corporation Piezo & Protection Device B. Grp.
 // Working temperature -40°C -  +125°C
 // Calculated using 4.7kohm pullup, voltage divider math, and manufacturer provided temp/resistance
-const short temptable_2000[][2] PROGMEM = {
+const int32_t temptable_2000[][2] PROGMEM = {
 { OV(  0), 700 },
 { OV(312), 125 },
 { OV(346), 120 },

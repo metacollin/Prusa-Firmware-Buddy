@@ -2,7 +2,7 @@
 // resistance at 25 deg. celsius: 100000
 // thermistor B value: 4267
 //
-const short temptable_2008[][2] PROGMEM = {
+const int32_t temptable_2008[][2] PROGMEM = {
 { OV(3), 300 },
 { OV(3), 280 },
 { OV(5), 260 },
